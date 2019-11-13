@@ -11,7 +11,6 @@
 #include <iostream>
 using namespace std;
 
-#include "lex.h"
 #include "parsetree.h"
 
 extern ParseTree *Prog(istream& in, int& line);

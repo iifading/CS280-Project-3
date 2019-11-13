@@ -6,6 +6,8 @@
  */
 
 #include "parse.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 namespace Parser {
     bool pushed_back = false;
@@ -100,33 +102,33 @@ ParseTree *Stmt(istream& in, int& line) {
         stmt = LoopStmt(in, line);
     }
 
+	ParseError(line, "invalid expression");
     return stmt; 
 }
 
 // IfStmt := IF Expr BEGIN Slist END
 ParseTree *IfStmt(istream& in, int& line) {
     //already verified IF token
-
     ParseTree *expr = Expr(in, line);
-    
     if (expr == 0){
         ParseError(line, "Invalid Expr");
+		return 0;
     }
-	Lex t = Parser::GetNextToken(in, line);
 
+	Lex t = Parser::GetNextToken(in, line);
     if (t != BEGIN){
 		Parser::PushBackToken(t);
         ParseError(line, "Missing token BEGIN");
+		return 0;
     }
 
     ParseTree *sl = Slist(in, line);
-
     if (sl == 0) {
         ParseError(line, "Invalid Slist");
+		return 0;
     }
 	
 	t = Parser::GetNextToken(in, line);
-
     if (t != END){
         ParseError(line, "Missing token END");
     }
@@ -136,7 +138,6 @@ ParseTree *IfStmt(istream& in, int& line) {
 // LetStmt := LET ID Expr
 ParseTree *LetStmt(istream& in, int& line) {
     //already verified LET token
-
 	Lex id = Parser::GetNextToken(in, line);
 
 	if (id != ID){
@@ -159,7 +160,6 @@ ParseTree *LetStmt(istream& in, int& line) {
 ParseTree *PrintStmt(istream& in, int& line) {
     //already verified PRINT token
     ParseTree *expr = Expr(in, line);
-
 	if (expr == 0){
 		ParseError(line, "invalid expression");
 		return 0;
@@ -264,7 +264,6 @@ ParseTree *Rev(istream& in, int& line) {
 	Lex t = Parser::GetNextToken(in, line);
 	
 	if (t == BANG) {
-		bangCount++;
 		ParseTree * expr = Expr(in, line);
 		return new BangExpr(line, expr);
 	}

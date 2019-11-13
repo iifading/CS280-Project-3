@@ -25,7 +25,6 @@ enum NodeType {
 // a "forward declaration" for a class to hold values
 class Value;
 
-static int bangCount = 0;
 class ParseTree {
     protected:
         int			linenum;
@@ -44,7 +43,19 @@ class ParseTree {
         int GetLineNumber() const { return linenum; }
 
         int MaxDepth() const {
-            return -1;
+            int lCount = 0;
+            int rCount = 0;
+            if(left != 0){
+                lCount += left->MaxDepth();
+            }
+            if(right != 0){
+                rCount += right->MaxDepth();
+            }
+            if(lCount > rCount){
+                return lCount;
+            }
+
+            return rCount;
         }
 
         virtual NodeType  getNodeType() const { return ERRTYPE; }
@@ -59,7 +70,7 @@ class ParseTree {
 
         
         int BangCount() const {
-            return bangCount;
+            return 1;
         }
 
         virtual void CheckLetBeforeUse(map<std::string,bool>& var) {
@@ -90,12 +101,13 @@ public:
 
 // := PRINT Expr
 class Print : public ParseTree {
+
 public:
-    Print(int& line, ParseTree *expr) 
-        : ParseTree(line, expr) {}
+    Print(int& line, ParseTree *expr) : ParseTree(line, expr) {}
 };
 
 class Loop : public ParseTree {
+
 public:
     Loop(int& line, ParseTree *expr, ParseTree *slist) : ParseTree(line, expr, slist) {}
 };
@@ -115,7 +127,9 @@ class PlusExpr : public ParseTree {
     int intValue;
     string strValue;
 public:
+
 	PlusExpr(int line, ParseTree *l, ParseTree *r) : ParseTree(line,l,r) {
+        /*
         //handle addition
         if ((l->getNodeType() == INTTYPE) && (r->getNodeType() == INTTYPE)){
             nodeType = INTTYPE;
@@ -129,6 +143,7 @@ public:
         //invalid operand types
         else
             nodeType = ERRTYPE;
+        */
     }
 
     NodeType getNodeType() const { return nodeType; }
@@ -148,6 +163,7 @@ class MinusExpr : public ParseTree {
     int value;
 public:
 	MinusExpr(int line, ParseTree *l, ParseTree *r) : ParseTree(line,l,r) {
+        /*
         //handle subtraction
         if ((l->getNodeType() == INTTYPE) && (r->getNodeType() == INTTYPE)) {
             nodeType = INTTYPE;
@@ -157,6 +173,7 @@ public:
         else {
             nodeType = ERRTYPE;
         }
+        */
     }
 
     NodeType getNodeType() const { return nodeType; }
@@ -173,6 +190,7 @@ class TimesExpr : public ParseTree {
     string strValue;
 public:
     TimesExpr(int line, ParseTree *l, ParseTree *r) : ParseTree(line, l, r) {
+        /*
         //handle integer multiplication
         if ((l->getNodeType() == INTTYPE) && (r->getNodeType() == INTTYPE)){
             nodeType = INTTYPE;
@@ -206,6 +224,7 @@ public:
         else {
             nodeType = ERRTYPE;
         }
+        */
     }//TimesExpr() constructor
 
     NodeType getNodeType() const { return nodeType; }
@@ -225,6 +244,7 @@ class DivideExpr : public ParseTree {
     string strValue;
 public:
     DivideExpr(int line, ParseTree *l, ParseTree *r) : ParseTree(line, l, r) {
+        /*
         //handle integer division
         if ((l->getNodeType() == INTTYPE) && (r->getNodeType() == INTTYPE)){
             nodeType = INTTYPE;
@@ -233,6 +253,7 @@ public:
         else {
             nodeType = ERRTYPE;
         }
+        */
     }//TimesExpr() constructor
 
     NodeType getNodeType() const { return nodeType; }
@@ -255,6 +276,7 @@ class BangExpr : public ParseTree {
 
 public: 
     BangExpr(int& line, ParseTree *expr) : ParseTree (line, expr){
+        /*
         //handle reversing digits
         if (expr->getNodeType() == INTTYPE){
             nodeType = INTTYPE;
@@ -268,6 +290,7 @@ public:
         else {
             nodeType = ERRTYPE;
         }
+        */
     }
 
     //Reverse a string

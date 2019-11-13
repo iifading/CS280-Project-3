@@ -4,20 +4,14 @@
  * Program 3 
  * main.cpp
 */
-
+#include <iostream>
 #include <fstream>
+#include "parse.h"
+#include "lex.h"
 using std::ifstream;
 
-#include <map>
-using std::map;
+using namespace std;
 
-#include "lex.h"
-using std::cin;
-using std::cout;
-using std::cerr;
-using std::endl;
-
-#include "parse.h"
 
 void traverse(ParseTree* node) {
     //null node
@@ -45,7 +39,7 @@ int main(int argc, char *argv[]){
 
     //Validate command line args
     if (argc > 2) {
-        cout << "TOO MANY FILES" << endl;
+        cout << "TOO MANY FILENAMES" << endl;
         return 0;
     }
     else if (argc == 2){
@@ -53,7 +47,7 @@ int main(int argc, char *argv[]){
         file.open(fileName);
 
         if( file.is_open() == false )  {
-            cerr << "CANNOT OPEN " << fileName << endl;
+            cerr << "COULD NOT OPEN " << fileName << endl;
             return 0; 
         }
 
@@ -61,14 +55,14 @@ int main(int argc, char *argv[]){
     }
 
     //begin parsing file
-    ParseTree* tree = Parse(in, 0);
+    ParseTree* tree = Parse(*in, 0);
 
     if (tree == 0)
     {
-        return 1;
+        return 0;
     }
 
-    traverse(tree);
+
     return 0;
 }//main()
 

@@ -11,6 +11,7 @@
 #include "lex.h"
 using namespace std;
 
+
 enum State{
     //begin state of a Lex object
     IN_BEGIN, 
